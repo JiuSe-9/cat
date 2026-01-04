@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>猫城建设者</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="game-container">
+        <!-- 事件通知区域 -->
+        <div id="eventNotification" class="event-notification hidden">
+            <div class="event-content">
+                <h3 id="eventTitle">事件标题</h3>
+                <p id="eventDescription">事件描述</p>
+                <div class="event-options">
+                    <button id="eventOption1" class="event-btn">选项1</button>
+                    <button id="eventOption2" class="event-btn">选项2</button>
+                </div>
+            </div>
+        </div>
+        
+        <header class="game-header">
+            <h1>猫城建设者</h1>
+            <div class="game-controls">
+                <button id="saveBtn">保存</button>
+                <button id="loadBtn">加载</button>
+                <button id="resetBtn">重置</button>
+            </div>
+        </header>
+
+        <main class="game-main">
+            <!-- 资源显示区域 -->
+            <section class="resources-section">
+                <h2>资源</h2>
+                <div class="resources-grid">
+                    <div class="resource-item">
+                        <span class="resource-name">猫薄荷</span>
+                        <span class="resource-amount" id="catnip">0</span>
+                        <span class="resource-rate" id="catnipRate">+0/s</span>
+                    </div>
+                    <div class="resource-item">
+                        <span class="resource-name">猫薄荷木</span>
+                        <span class="resource-amount" id="catnipWood">0</span>
+                        <span class="resource-rate" id="catnipWoodRate">+0/s</span>
+                    </div>
+                    <div class="resource-item">
+                        <span class="resource-name">鱼干</span>
+                        <span class="resource-amount" id="fish">0</span>
+                        <span class="resource-rate" id="fishRate">+0/s</span>
+                    </div>
+                    <div class="resource-item">
+                        <span class="resource-name">猫零食</span>
+                        <span class="resource-amount" id="catSnack">0</span>
+                        <span class="resource-rate" id="catSnackRate">+0/s</span>
+                    </div>
+                    <div class="resource-item">
+                        <span class="resource-name">猫玩具</span>
+                        <span class="resource-amount" id="catToy">0</span>
+                        <span class="resource-rate" id="catToyRate">+0/s</span>
+                    </div>
+                    <div class="resource-item">
+                        <span class="resource-name">猫币</span>
+                        <span class="resource-amount" id="catCoin">0</span>
+                        <span class="resource-rate" id="catCoinRate">+0/s</span>
+                    </div>
+                    <div class="resource-item">
+                        <span class="resource-name">人口</span>
+                        <span class="resource-amount" id="population">1</span>
+                        <span class="resource-rate" id="populationRate">+0/s</span>
+                    </div>
+                </div>
+                <div class="manual-collect">
+                    <button id="collectBtn" class="collect-btn">点击采集猫薄荷</button>
+                </div>
+            </section>
+
+            <!-- 建筑区域 -->
+            <section class="buildings-section">
+                <h2>建筑</h2>
+                <div class="buildings-grid" id="buildingsGrid">
+                    <!-- 建筑将通过JavaScript动态生成 -->
+                </div>
+            </section>
+
+            <!-- 人口管理区域 -->
+            <section class="population-section">
+                <h2>工作分配</h2>
+                <div class="jobs-container" id="jobsContainer">
+                    <!-- 工作分配将通过JavaScript动态生成 -->
+                </div>
+            </section>
+
+            <!-- 科技树区域 -->
+            <section class="tech-section">
+                <h2>科技</h2>
+                <div class="tech-grid" id="techGrid">
+                    <!-- 科技将通过JavaScript动态生成 -->
+                </div>
+            </section>
+
+            <!-- 贸易区域 -->
+            <section class="trade-section">
+                <h2>贸易</h2>
+                <div class="trade-content">
+                    <div class="trade-column">
+                        <h3>你要出售的资源</h3>
+                        <div class="resource-selector">
+                            <select id="sellResource">
+                                <option value="catnip">猫薄荷</option>
+                                <option value="catnipWood">猫薄荷木</option>
+                                <option value="fish">鱼干</option>
+                                <option value="catSnack">猫零食</option>
+                                <option value="catToy">猫玩具</option>
+                                <option value="catCoin">猫币</option>
+                            </select>
+                            <div class="resource-amount-control">
+                                <button id="decreaseSell" class="amount-btn">-</button>
+                                <input type="number" id="sellAmount" value="10" min="1">
+                                <button id="increaseSell" class="amount-btn">+</button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="trade-arrow">
+                        <span>→</span>
+                    </div>
+                    
+                    <div class="trade-column">
+                        <h3>你要购买的资源</h3>
+                        <div class="resource-selector">
+                            <select id="buyResource">
+                                <option value="catnip">猫薄荷</option>
+                                <option value="catnipWood">猫薄荷木</option>
+                                <option value="fish">鱼干</option>
+                                <option value="catSnack">猫零食</option>
+                                <option value="catToy">猫玩具</option>
+                                <option value="catCoin">猫币</option>
+                            </select>
+                            <div class="resource-amount-control">
+                                <button id="decreaseBuy" class="amount-btn">-</button>
+                                <input type="number" id="buyAmount" value="10" min="1">
+                                <button id="increaseBuy" class="amount-btn">+</button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="trade-info">
+                        <p id="tradeRatio">交换比率: 1 : 1</p>
+                        <p id="tradeStatus">准备交易</p>
+                    </div>
+                    
+                    <button id="tradeBtn" class="trade-btn">执行交易</button>
+                </div>
+            </section>
+
+            <!-- 任务区域 -->
+            <section class="tasks-section">
+                <h2>任务</h2>
+                <div class="tasks-tabs">
+                    <button class="tab-btn active" data-tab="main">主线任务</button>
+                    <button class="tab-btn" data-tab="daily">日常任务</button>
+                </div>
+                <div class="tasks-content">
+                    <div class="tasks-list active" id="mainTasks">
+                        <!-- 主线任务将通过JavaScript动态生成 -->
+                    </div>
+                    <div class="tasks-list" id="dailyTasks">
+                        <!-- 日常任务将通过JavaScript动态生成 -->
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <footer class="game-footer">
+            <p>猫城建设者 - 挂机游戏</p>
+        </footer>
+    </div>
+
+    <script src="game.js"></script>
+</body>
+</html>
