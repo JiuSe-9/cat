@@ -2,189 +2,409 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>猫城建设者</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>猫咪文明建设</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div class="game-container">
-        <!-- 事件通知区域 -->
-        <div id="eventNotification" class="event-notification hidden">
-            <div class="event-content">
-                <h3 id="eventTitle">事件标题</h3>
-                <p id="eventDescription">事件描述</p>
-                <div class="event-options">
-                    <button id="eventOption1" class="event-btn">选项1</button>
-                    <button id="eventOption2" class="event-btn">选项2</button>
-                </div>
-            </div>
-        </div>
-        
         <header class="game-header">
-            <h1>猫城建设者</h1>
-            <div class="game-controls">
-                <button id="saveBtn">保存</button>
-                <button id="loadBtn">加载</button>
-                <button id="resetBtn">重置</button>
+            <h1>猫咪文明建设</h1>
+            <div class="header-info">
+                <div class="cycle-info">周目: <span id="cycle">1</span></div>
+                <div class="time-info">时间: <span id="time">0</span>s</div>
+                <div class="season-info">季节: <span id="season">春季</span></div>
             </div>
         </header>
 
         <main class="game-main">
-            <!-- 资源显示区域 -->
-            <section class="resources-section">
+            <section class="resource-panel">
                 <h2>资源</h2>
-                <div class="resources-grid">
+                <div class="resources">
                     <div class="resource-item">
                         <span class="resource-name">猫薄荷</span>
-                        <span class="resource-amount" id="catnip">0</span>
+                        <span class="resource-value" id="catnip">0</span>/<span id="catnipMax">100</span>
                         <span class="resource-rate" id="catnipRate">+0/s</span>
                     </div>
                     <div class="resource-item">
-                        <span class="resource-name">猫薄荷木</span>
-                        <span class="resource-amount" id="catnipWood">0</span>
-                        <span class="resource-rate" id="catnipWoodRate">+0/s</span>
+                        <span class="resource-name">木材</span>
+                        <span class="resource-value" id="wood">0</span>/<span id="woodMax">100</span>
+                        <span class="resource-rate" id="woodRate">+0/s</span>
                     </div>
                     <div class="resource-item">
-                        <span class="resource-name">鱼干</span>
-                        <span class="resource-amount" id="fish">0</span>
-                        <span class="resource-rate" id="fishRate">+0/s</span>
+                        <span class="resource-name">石头</span>
+                        <span class="resource-value" id="stone">0</span>/<span id="stoneMax">100</span>
+                        <span class="resource-rate" id="stoneRate">+0/s</span>
                     </div>
                     <div class="resource-item">
-                        <span class="resource-name">猫零食</span>
-                        <span class="resource-amount" id="catSnack">0</span>
-                        <span class="resource-rate" id="catSnackRate">+0/s</span>
+                        <span class="resource-name">煤炭</span>
+                        <span class="resource-value" id="coal">0</span>/<span id="coalMax">100</span>
+                        <span class="resource-rate" id="coalRate">+0/s</span>
                     </div>
                     <div class="resource-item">
-                        <span class="resource-name">猫玩具</span>
-                        <span class="resource-amount" id="catToy">0</span>
-                        <span class="resource-rate" id="catToyRate">+0/s</span>
+                        <span class="resource-name">钢铁</span>
+                        <span class="resource-value" id="steel">0</span>/<span id="steelMax">100</span>
+                        <span class="resource-rate" id="steelRate">+0/s</span>
                     </div>
                     <div class="resource-item">
-                        <span class="resource-name">猫币</span>
-                        <span class="resource-amount" id="catCoin">0</span>
-                        <span class="resource-rate" id="catCoinRate">+0/s</span>
+                        <span class="resource-name">铀</span>
+                        <span class="resource-value" id="uranium">0</span>/<span id="uraniumMax">50</span>
+                        <span class="resource-rate" id="uraniumRate">+0/s</span>
                     </div>
                     <div class="resource-item">
-                        <span class="resource-name">矿产</span>
-                        <span class="resource-amount" id="mineral">0</span>
-                        <span class="resource-rate" id="mineralRate">+0/s</span>
+                        <span class="resource-name">毛皮</span>
+                        <span class="resource-value" id="fur">0</span>/<span id="furMax">50</span>
+                        <span class="resource-rate" id="furRate">+0/s</span>
                     </div>
                     <div class="resource-item">
-                        <span class="resource-name">研究点数</span>
-                        <span class="resource-amount" id="researchPoints">0</span>
-                        <span class="resource-rate" id="researchPointsRate">+0/s</span>
+                        <span class="resource-name">工具</span>
+                        <span class="resource-value" id="tools">0</span>/<span id="toolsMax">50</span>
+                        <span class="resource-rate" id="toolsRate">+0/s</span>
                     </div>
                     <div class="resource-item">
-                        <span class="resource-name">人口</span>
-                        <span class="resource-amount" id="population">1</span>
-                        <span class="resource-rate" id="populationRate">+0/s</span>
+                        <span class="resource-name">知识</span>
+                        <span class="resource-value" id="knowledge">0</span>/<span id="knowledgeMax">50</span>
+                        <span class="resource-rate" id="knowledgeRate">+0/s</span>
+                    </div>
+                    <div class="resource-item">
+                        <span class="resource-name">文化</span>
+                        <span class="resource-value" id="culture">0</span>/<span id="cultureMax">50</span>
+                        <span class="resource-rate" id="cultureRate">+0/s</span>
+                    </div>
+                    <div class="resource-item">
+                        <span class="resource-name">信仰</span>
+                        <span class="resource-value" id="faith">0</span>/<span id="faithMax">50</span>
+                        <span class="resource-rate" id="faithRate">+0/s</span>
                     </div>
                 </div>
-                <div class="manual-collect">
-                    <button id="collectBtn" class="collect-btn">点击采集猫薄荷</button>
+                
+                <div class="prestige-resources">
+                    <h3>声望资源</h3>
+                    <div class="resource-item">
+                        <span class="resource-name">领导力</span>
+                        <span class="resource-value" id="leadership">0</span>
+                    </div>
+                    <div class="resource-item">
+                        <span class="resource-name">业力</span>
+                        <span class="resource-value" id="karma">0</span>
+                    </div>
                 </div>
             </section>
 
-            <!-- 建筑区域 -->
-            <section class="buildings-section">
+            <section class="kitten-panel">
+                <h2>猫咪</h2>
+                <div class="kitten-info">
+                    <div class="kitten-count">数量: <span id="kittenCount">1</span>/<span id="kittenMax">5</span></div>
+                    <div class="kitten-happiness">幸福度: <span id="happiness">80</span>%</div>
+                </div>
+                <div class="kitten-jobs">
+                    <h3>职业分配</h3>
+                    <div class="job-item">
+                        <span>农民:</span> <span id="jobFarmerCount">0</span>
+                        <button onclick="assignJob('farmer', 1)">+</button>
+                        <button onclick="unassignJob('farmer', 1)">-</button>
+                    </div>
+                    <div class="job-item">
+                        <span>伐木工:</span> <span id="jobLumberjackCount">0</span>
+                        <button onclick="assignJob('lumberjack', 1)">+</button>
+                        <button onclick="unassignJob('lumberjack', 1)">-</button>
+                    </div>
+                    <div class="job-item">
+                        <span>矿工:</span> <span id="jobMinerCount">0</span>
+                        <button onclick="assignJob('miner', 1)">+</button>
+                        <button onclick="unassignJob('miner', 1)">-</button>
+                    </div>
+                    <div class="job-item">
+                        <span>科学家:</span> <span id="jobScientistCount">0</span>
+                        <button onclick="assignJob('scientist', 1)">+</button>
+                        <button onclick="unassignJob('scientist', 1)">-</button>
+                    </div>
+                    <div class="job-item">
+                        <span>猎人:</span> <span id="jobHunterCount">0</span>
+                        <button onclick="assignJob('hunter', 1)">+</button>
+                        <button onclick="unassignJob('hunter', 1)">-</button>
+                    </div>
+                    <div class="job-item">
+                        <span>工程师:</span> <span id="jobEngineerCount">0</span>
+                        <button onclick="assignJob('engineer', 1)">+</button>
+                        <button onclick="unassignJob('engineer', 1)">-</button>
+                    </div>
+                    <div class="job-item">
+                        <span>牧师:</span> <span id="jobPriestCount">0</span>
+                        <button onclick="assignJob('priest', 1)">+</button>
+                        <button onclick="unassignJob('priest', 1)">-</button>
+                    </div>
+                    <div class="job-item">
+                        <span>失业:</span> <span id="jobUnemployedCount">1</span>
+                    </div>
+                </div>
+                <div class="kitten-actions">
+                    <button id="trainKitten" class="btn">训练猫咪</button>
+                </div>
+            </section>
+
+            <section class="building-panel">
                 <h2>建筑</h2>
-                <div class="buildings-grid" id="buildingsGrid">
-                    <!-- 建筑将通过JavaScript动态生成 -->
+                <div class="buildings">
+                    <div class="building" id="farm">
+                        <div class="building-name">农田</div>
+                        <div class="building-count">数量: <span id="farmCount">0</span></div>
+                        <div class="building-cost">成本: 猫薄荷 10, 木材 5</div>
+                        <button class="build-btn" data-building="farm">建造</button>
+                    </div>
+                    <div class="building" id="lumbermill">
+                        <div class="building-name">伐木场</div>
+                        <div class="building-count">数量: <span id="lumbermillCount">0</span></div>
+                        <div class="building-cost">成本: 猫薄荷 15, 木材 10</div>
+                        <button class="build-btn" data-building="lumbermill">建造</button>
+                    </div>
+                    <div class="building" id="mine">
+                        <div class="building-name">矿井</div>
+                        <div class="building-count">数量: <span id="mineCount">0</span></div>
+                        <div class="building-cost">成本: 猫薄荷 20, 木材 15, 石头 5</div>
+                        <button class="build-btn" data-building="mine">建造</button>
+                    </div>
+                    <div class="building" id="library">
+                        <div class="building-name">图书馆</div>
+                        <div class="building-count">数量: <span id="libraryCount">0</span></div>
+                        <div class="building-cost">成本: 猫薄荷 30, 木材 20, 石头 10</div>
+                        <button class="build-btn" data-building="library">建造</button>
+                    </div>
+                    <div class="building" id="university">
+                        <div class="building-name">大学</div>
+                        <div class="building-count">数量: <span id="universityCount">0</span></div>
+                        <div class="building-cost">成本: 木材 100, 石头 50, 钢铁 20</div>
+                        <button class="build-btn" data-building="university">建造</button>
+                    </div>
+                    <div class="building" id="tent">
+                        <div class="building-name">帐篷</div>
+                        <div class="building-count">数量: <span id="tentCount">1</span></div>
+                        <div class="building-cost">成本: 木材 10</div>
+                        <button class="build-btn" data-building="tent">建造</button>
+                    </div>
+                    <div class="building" id="house">
+                        <div class="building-name">小屋</div>
+                        <div class="building-count">数量: <span id="houseCount">0</span></div>
+                        <div class="building-cost">成本: 木材 30, 石头 15</div>
+                        <button class="build-btn" data-building="house">建造</button>
+                    </div>
+                    <div class="building" id="warehouse">
+                        <div class="building-name">仓库</div>
+                        <div class="building-count">数量: <span id="warehouseCount">0</span></div>
+                        <div class="building-cost">成本: 木材 20, 石头 10</div>
+                        <button class="build-btn" data-building="warehouse">建造</button>
+                    </div>
+                    <div class="building" id="barn">
+                        <div class="building-name">谷仓</div>
+                        <div class="building-count">数量: <span id="barnCount">0</span></div>
+                        <div class="building-cost">成本: 木材 25, 石头 10</div>
+                        <button class="build-btn" data-building="barn">建造</button>
+                    </div>
+                    <div class="building" id="coalStove">
+                        <div class="building-name">煤炉</div>
+                        <div class="building-count">数量: <span id="coalStoveCount">0</span></div>
+                        <div class="building-cost">成本: 木材 10, 石头 5</div>
+                        <button class="build-btn" data-building="coalStove">建造</button>
+                    </div>
+                    <div class="building" id="aqueduct">
+                        <div class="building-name">水渠</div>
+                        <div class="building-count">数量: <span id="aqueductCount">0</span></div>
+                        <div class="building-cost">成本: 石头 50, 木材 30</div>
+                        <button class="build-btn" data-building="aqueduct">建造</button>
+                    </div>
+                    <div class="building" id="huntingLodge">
+                        <div class="building-name">狩猎小屋</div>
+                        <div class="building-count">数量: <span id="huntingLodgeCount">0</span></div>
+                        <div class="building-cost">成本: 木材 40, 石头 10</div>
+                        <button class="build-btn" data-building="huntingLodge">建造</button>
+                    </div>
+                    <div class="building" id="factory">
+                        <div class="building-name">工厂</div>
+                        <div class="building-count">数量: <span id="factoryCount">0</span></div>
+                        <div class="building-cost">成本: 钢铁 30, 木材 50, 煤炭 20</div>
+                        <button class="build-btn" data-building="factory">建造</button>
+                    </div>
+                    <div class="building" id="workshop">
+                        <div class="building-name">工坊</div>
+                        <div class="building-count">数量: <span id="workshopCount">0</span></div>
+                        <div class="building-cost">成本: 木材 40, 石头 20, 钢铁 5</div>
+                        <button class="build-btn" data-building="workshop">建造</button>
+                    </div>
+                    <div class="building" id="theater">
+                        <div class="building-name">剧院</div>
+                        <div class="building-count">数量: <span id="theaterCount">0</span></div>
+                        <div class="building-cost">成本: 木材 80, 石头 30</div>
+                        <button class="build-btn" data-building="theater">建造</button>
+                    </div>
+                    <div class="building" id="temple">
+                        <div class="building-name">寺庙</div>
+                        <div class="building-count">数量: <span id="templeCount">0</span></div>
+                        <div class="building-cost">成本: 木材 100, 石头 80</div>
+                        <button class="build-btn" data-building="temple">建造</button>
+                    </div>
                 </div>
             </section>
 
-            <!-- 人口管理区域 -->
-            <section class="population-section">
-                <h2>工作分配</h2>
-                <div class="jobs-container" id="jobsContainer">
-                    <!-- 工作分配将通过JavaScript动态生成 -->
-                </div>
-            </section>
-
-            <!-- 科技树区域 -->
-            <section class="tech-section">
+            <section class="tech-panel">
                 <h2>科技</h2>
-                <div class="tech-grid" id="techGrid">
-                    <!-- 科技将通过JavaScript动态生成 -->
+                <div class="techs">
+                    <div class="tech" id="agriculture">
+                        <div class="tech-name">农业科技</div>
+                        <div class="tech-effect">提升农田产量 20%</div>
+                        <div class="tech-cost">成本: 知识 10</div>
+                        <button class="research-btn" data-tech="agriculture">研发</button>
+                    </div>
+                    <div class="tech" id="animalHusbandry">
+                        <div class="tech-name">畜牧业</div>
+                        <div class="tech-effect">提升农田产量 30%</div>
+                        <div class="tech-cost">成本: 知识 25, 猫薄荷 100</div>
+                        <button class="research-btn" data-tech="animalHusbandry">研发</button>
+                    </div>
+                    <div class="tech" id="horticulture">
+                        <div class="tech-name">园艺学</div>
+                        <div class="tech-effect">提升农田产量 40%</div>
+                        <div class="tech-cost">成本: 知识 40, 木材 50</div>
+                        <button class="research-btn" data-tech="horticulture">研发</button>
+                    </div>
+                    <div class="tech" id="genetics">
+                        <div class="tech-name">基因工程</div>
+                        <div class="tech-effect">提升农田产量 50%</div>
+                        <div class="tech-cost">成本: 知识 200, 钢铁 30, 信仰 20</div>
+                        <button class="research-btn" data-tech="genetics">研发</button>
+                    </div>
+                    <div class="tech" id="mining">
+                        <div class="tech-name">矿业科技</div>
+                        <div class="tech-effect">解锁石头开采</div>
+                        <div class="tech-cost">成本: 知识 15</div>
+                        <button class="research-btn" data-tech="mining">研发</button>
+                    </div>
+                    <div class="tech" id="geology">
+                        <div class="tech-name">地质学</div>
+                        <div class="tech-effect">提升矿物产量 50%</div>
+                        <div class="tech-cost">成本: 知识 50, 石头 100</div>
+                        <button class="research-btn" data-tech="geology">研发</button>
+                    </div>
+                    <div class="tech" id="steelTech">
+                        <div class="tech-name">钢材科技</div>
+                        <div class="tech-effect">解锁煤炭和钢铁开采</div>
+                        <div class="tech-cost">成本: 知识 30, 石头 20</div>
+                        <button class="research-btn" data-tech="steelTech">研发</button>
+                    </div>
+                    <div class="tech" id="metallurgy">
+                        <div class="tech-name">冶金学</div>
+                        <div class="tech-effect">钢铁产量翻倍</div>
+                        <div class="tech-cost">成本: 知识 80, 煤炭 50, 石头 50</div>
+                        <button class="research-btn" data-tech="metallurgy">研发</button>
+                    </div>
+                    <div class="tech" id="materials">
+                        <div class="tech-name">材料科学</div>
+                        <div class="tech-effect">钢铁和铀产量提升</div>
+                        <div class="tech-cost">成本: 知识 200, 钢铁 100, 煤炭 100</div>
+                        <button class="research-btn" data-tech="materials">研发</button>
+                    </div>
+                    <div class="tech" id="advancedTech">
+                        <div class="tech-name">高级科技</div>
+                        <div class="tech-effect">解锁铀开采</div>
+                        <div class="tech-cost">成本: 知识 150, 钢铁 50, 煤炭 30</div>
+                        <button class="research-btn" data-tech="advancedTech">研发</button>
+                    </div>
+                    <div class="tech" id="engineering">
+                        <div class="tech-name">工程科技</div>
+                        <div class="tech-effect">降低建筑成本 10%</div>
+                        <div class="tech-cost">成本: 知识 20, 石头 5</div>
+                        <button class="research-btn" data-tech="engineering">研发</button>
+                    </div>
+                    <div class="tech" id="mechanics">
+                        <div class="tech-name">机械学</div>
+                        <div class="tech-effect">解锁工具生产</div>
+                        <div class="tech-cost">成本: 知识 60, 钢铁 20, 木材 100</div>
+                        <button class="research-btn" data-tech="mechanics">研发</button>
+                    </div>
+                    <div class="tech" id="automation">
+                        <div class="tech-name">自动化</div>
+                        <div class="tech-effect">大幅提升工具产量</div>
+                        <div class="tech-cost">成本: 知识 150, 钢铁 80, 煤炭 50</div>
+                        <button class="research-btn" data-tech="automation">研发</button>
+                    </div>
+                    <div class="tech" id="robotics">
+                        <div class="tech-name">机器人技术</div>
+                        <div class="tech-effect">极大提升工具产量</div>
+                        <div class="tech-cost">成本: 知识 300, 钢铁 150, 铀 20</div>
+                        <button class="research-btn" data-tech="robotics">研发</button>
+                    </div>
+                    <div class="tech" id="mathematics">
+                        <div class="tech-name">数学</div>
+                        <div class="tech-effect">知识产量提升 20%</div>
+                        <div class="tech-cost">成本: 知识 30</div>
+                        <button class="research-btn" data-tech="mathematics">研发</button>
+                    </div>
+                    <div class="tech" id="physics">
+                        <div class="tech-name">物理</div>
+                        <div class="tech-effect">知识产量提升 30%</div>
+                        <div class="tech-cost">成本: 知识 80, 石头 30</div>
+                        <button class="research-btn" data-tech="physics">研发</button>
+                    </div>
+                    <div class="tech" id="chemistry">
+                        <div class="tech-name">化学</div>
+                        <div class="tech-effect">知识产量提升 40%</div>
+                        <div class="tech-cost">成本: 知识 100, 石头 50, 煤炭 30</div>
+                        <button class="research-btn" data-tech="chemistry">研发</button>
+                    </div>
+                    <div class="tech" id="astronomy">
+                        <div class="tech-name">天文学</div>
+                        <div class="tech-effect">知识产量提升 50%</div>
+                        <div class="tech-cost">成本: 知识 150, 钢铁 50, 木材 100</div>
+                        <button class="research-btn" data-tech="astronomy">研发</button>
+                    </div>
+                    <div class="tech" id="spaceTravel">
+                        <div class="tech-name">航天技术</div>
+                        <div class="tech-effect">知识产量大幅提升</div>
+                        <div class="tech-cost">成本: 知识 400, 钢铁 200, 铀 50</div>
+                        <button class="research-btn" data-tech="spaceTravel">研发</button>
+                    </div>
+                    <div class="tech" id="interstellar">
+                        <div class="tech-name">星际航行</div>
+                        <div class="tech-effect">知识产量翻倍</div>
+                        <div class="tech-cost">成本: 知识 1000, 钢铁 500, 铀 100</div>
+                        <button class="research-btn" data-tech="interstellar">研发</button>
+                    </div>
+                    <div class="tech" id="theology">
+                        <div class="tech-name">神学</div>
+                        <div class="tech-effect">信仰产量提升 50%</div>
+                        <div class="tech-cost">成本: 知识 40, 信仰 20</div>
+                        <button class="research-btn" data-tech="theology">研发</button>
+                    </div>
+                    <div class="tech" id="philosophy">
+                        <div class="tech-name">哲学</div>
+                        <div class="tech-effect">信仰和文化产量提升</div>
+                        <div class="tech-cost">成本: 知识 80, 文化 30, 信仰 20</div>
+                        <button class="research-btn" data-tech="philosophy">研发</button>
+                    </div>
+                    <div class="tech" id="psychology">
+                        <div class="tech-name">心理学</div>
+                        <div class="tech-effect">幸福度提升 10%</div>
+                        <div class="tech-cost">成本: 知识 150, 文化 50, 信仰 30</div>
+                        <button class="research-btn" data-tech="psychology">研发</button>
+                    </div>
+                    <div class="tech" id="dimension">
+                        <div class="tech-name">次元超越</div>
+                        <div class="tech-effect">解锁重置功能</div>
+                        <div class="tech-cost">成本: 知识 100, 文化 50, 信仰 50</div>
+                        <button class="research-btn" data-tech="dimension">研发</button>
+                    </div>
                 </div>
             </section>
 
-            <!-- 贸易区域 -->
-            <section class="trade-section">
-                <h2>贸易</h2>
-                <div class="trade-content">
-                    <div class="trade-column">
-                        <h3>你要出售的资源</h3>
-                        <div class="resource-selector">
-                            <select id="sellResource">
-                                <option value="catnip">猫薄荷</option>
-                                <option value="catnipWood">猫薄荷木</option>
-                                <option value="fish">鱼干</option>
-                                <option value="catSnack">猫零食</option>
-                                <option value="catToy">猫玩具</option>
-                                <option value="catCoin">猫币</option>
-                            </select>
-                            <div class="resource-amount-control">
-                                <button id="decreaseSell" class="amount-btn">-</button>
-                                <input type="number" id="sellAmount" value="10" min="1">
-                                <button id="increaseSell" class="amount-btn">+</button>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="trade-arrow">
-                        <span>→</span>
-                    </div>
-                    
-                    <div class="trade-column">
-                        <h3>你要购买的资源</h3>
-                        <div class="resource-selector">
-                            <select id="buyResource">
-                                <option value="catnip">猫薄荷</option>
-                                <option value="catnipWood">猫薄荷木</option>
-                                <option value="fish">鱼干</option>
-                                <option value="catSnack">猫零食</option>
-                                <option value="catToy">猫玩具</option>
-                                <option value="catCoin">猫币</option>
-                            </select>
-                            <div class="resource-amount-control">
-                                <button id="decreaseBuy" class="amount-btn">-</button>
-                                <input type="number" id="buyAmount" value="10" min="1">
-                                <button id="increaseBuy" class="amount-btn">+</button>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="trade-info">
-                        <p id="tradeRatio">交换比率: 1 : 1</p>
-                        <p id="tradeStatus">准备交易</p>
-                    </div>
-                    
-                    <button id="tradeBtn" class="trade-btn">执行交易</button>
+            <section class="reset-panel">
+                <h2>次元超越</h2>
+                <div class="reset-info">
+                    <p>重置后将获得领导力和业力，保留声望资源，但会失去所有猫咪、资源和建筑。</p>
+                    <p>预计获得领导力: <span id="expectedLeadership">0</span></p>
+                    <p>预计获得业力: <span id="expectedKarma">0</span></p>
                 </div>
-            </section>
-
-            <!-- 任务区域 -->
-            <section class="tasks-section">
-                <h2>任务</h2>
-                <div class="tasks-tabs">
-                    <button class="tab-btn active" data-tab="main">主线任务</button>
-                    <button class="tab-btn" data-tab="daily">日常任务</button>
-                </div>
-                <div class="tasks-content">
-                    <div class="tasks-list active" id="mainTasks">
-                        <!-- 主线任务将通过JavaScript动态生成 -->
-                    </div>
-                    <div class="tasks-list" id="dailyTasks">
-                        <!-- 日常任务将通过JavaScript动态生成 -->
-                    </div>
-                </div>
+                <button id="resetBtn" class="reset-btn">进行次元超越</button>
             </section>
         </main>
-
-        <footer class="game-footer">
-            <p>猫城建设者 - 挂机游戏</p>
-        </footer>
     </div>
 
     <script src="game.js"></script>
