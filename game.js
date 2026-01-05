@@ -70,6 +70,90 @@ const levelConfigs = {
     master: { name: "大师", multiplier: 3 }
 };
 
+// 卡巴拉节点配置
+const kabbalahNodes = {
+    malkuth: {
+        name: "Malkuth (王国)",
+        leadership: 500,
+        productionThreshold: 618,
+        storageThreshold: 10500,
+        productionBonus: 1.05,
+        storageBonus: 1.1
+    },
+    yesod: {
+        name: "Yesod (基础)",
+        leadership: 750,
+        productionThreshold: 880,
+        storageThreshold: 16500,
+        productionBonus: 1.1,
+        storageBonus: 1.2
+    },
+    hod: {
+        name: "Hod (荣耀)",
+        leadership: 1250,
+        productionThreshold: 1394,
+        storageThreshold: 28750,
+        productionBonus: 1.15,
+        storageBonus: 1.3
+    },
+    netzach: {
+        name: "Netzach (胜利)",
+        leadership: 1750,
+        productionThreshold: 1906,
+        storageThreshold: 42000,
+        productionBonus: 1.2,
+        storageBonus: 1.4
+    },
+    tiferet: {
+        name: "Tiferet (美丽)",
+        leadership: 2500,
+        productionThreshold: 2669,
+        storageThreshold: 62500,
+        productionBonus: 1.25,
+        storageBonus: 1.5
+    },
+    gevurah: {
+        name: "Gevurah (力量)",
+        leadership: 5000,
+        productionThreshold: 5182,
+        storageThreshold: 130000,
+        productionBonus: 1.3,
+        storageBonus: 1.6
+    },
+    chesed: {
+        name: "Chesed (仁慈)",
+        leadership: 7500,
+        productionThreshold: 7695,
+        storageThreshold: 202500,
+        productionBonus: 1.35,
+        storageBonus: 1.7
+    },
+    binah: {
+        name: "Binah (理解)",
+        leadership: 15000,
+        productionThreshold: 15209,
+        storageThreshold: 420000,
+        productionBonus: 1.4,
+        storageBonus: 1.8
+    },
+    chokhmah: {
+        name: "Chokhmah (智慧)",
+        leadership: 30000,
+        productionThreshold: 30221,
+        storageThreshold: 870000,
+        productionBonus: 1.45,
+        storageBonus: 1.9
+    },
+    keter: {
+        name: "Keter (王冠)",
+        leadership: 60000,
+        productionThreshold: 60233,
+        storageThreshold: 1800000,
+        productionBonus: 1.5,
+        storageBonus: 2.0
+    }
+};
+
 // 游戏状态
 let gameState = {
     resources: {
@@ -83,7 +167,9 @@ let gameState = {
         culture: 0,
         faith: 0,
         fur: 0,
-        tools: 0
+        tools: 0,
+        electricity: 0,
+        nuclearEnergy: 0
     },
     
     resourceCaps: {
@@ -97,7 +183,9 @@ let gameState = {
         culture: 50,
         faith: 50,
         fur: 50,
-        tools: 50
+        tools: 50,
+        electricity: 50,
+        nuclearEnergy: 25
     },
     
     buildings: {
@@ -116,13 +204,16 @@ let gameState = {
         factory: 0,
         house: 0,
         barn: 0,
-        workshop: 0
+        workshop: 0,
+        steamEngine: 0,
+        powerPlant: 0,
+        nuclearReactor: 0,
+        refinery: 0
     },
     
     kittens: {
         count: 1,
         max: 5,
-        happiness: 80,
         trained: 0,
         jobs: {
             farmer: 0,
@@ -170,6 +261,54 @@ let gameState = {
         karma: 0
     },
     
+    kabbalah: {
+        malkuth: false,
+        yesod: false,
+        hod: false,
+        netzach: false,
+        tiferet: false,
+        gevurah: false,
+        chesed: false,
+        binah: false,
+        chokhmah: false,
+        keter: false
+    },
+    
+    // 外交与探索系统
+    diplomacy: {
+        contacts: [], // 已联系的文明
+        treaties: [], // 已签订的条约
+        tradeRoutes: [], // 贸易路线
+        starMaps: 0, // 星图数量
+        tradeShips: 0 // 贸易船数量
+    },
+    
+    exploration: {
+        expeditions: [], // 正在进行的探险
+        discovered: [], // 已发现的领地
+        relics: [] // 获得的遗物
+    },
+    
+    // 太空探索系统
+    space: {
+        exploration: {
+            moon: false, // 月球探索状态
+            planets: [], // 已探索的行星
+            galaxies: [], // 已探索的星系
+            alienContacts: [] // 已接触的外星文明
+        },
+        structures: {
+            moonBase: 0, // 月球基地数量
+            spaceStation: 0, // 空间站数量
+            warpGate: 0 // 虫洞门数量
+        },
+        resources: {
+            helium3: 0, // 氦-3资源
+            exoticMatter: 0, // 奇异物质
+            darkEnergy: 0 // 暗能量
+        }
+    },
+    
     cycle: 1,
     time: 0,
     
@@ -190,6 +329,278 @@ let gameState = {
         tools: 0
     }
 };
+
+// 文明配置
+const civilizationConfigs = {
+    fox: {
+        name: "狐狸文明",
+        type: "merchant",
+        specialties: ["fur", "crafts"],
+        relations: 0,
+        tradeBonus: 1.2
+    },
+    rabbit: {
+        name: "兔子文明",
+        type: "agricultural",
+        specialties: ["catnip", "food"],
+        relations: 0,
+        tradeBonus: 1.1
+    },
+    dragon: {
+        name: "龙族文明",
+        type: "mystical",
+        specialties: ["knowledge", "faith"],
+        relations: 0,
+        tradeBonus: 1.5
+    },
+    bear: {
+        name: "熊族文明",
+        type: "industrial",
+        specialties: ["wood", "stone"],
+        relations: 0,
+        tradeBonus: 1.3
+    },
+    bird: {
+        name: "鸟类文明",
+        type: "nomadic",
+        specialties: ["culture", "tools"],
+        relations: 0,
+        tradeBonus: 1.25
+    }
+};
+
+// 外交与探索系统功能
+function establishContact(civilization) {
+    if (!gameState.techs.astronomy) {
+        alert('请先研发天文学科技！');
+        return false;
+    }
+    
+    if (gameState.diplomacy.contacts.includes(civilization)) {
+        alert('已与该文明建立联系！');
+        return false;
+    }
+    
+    if (gameState.resources.knowledge < 100) {
+        alert('知识不足！');
+        return false;
+    }
+    
+    spendResources({ knowledge: 100 });
+    gameState.diplomacy.contacts.push(civilization);
+    
+    alert(`成功与${civilizationConfigs[civilization].name}建立联系！`);
+    return true;
+}
+
+function buildTradeShip() {
+    if (!gameState.techs.spaceTravel) {
+        alert('请先研发航天技术！');
+        return false;
+    }
+    
+    if (gameState.diplomacy.starMaps < 1) {
+        alert('星图不足！星图可通过天文事件获得。');
+        return false;
+    }
+    
+    if (gameState.resources.steel < 50 || gameState.resources.uranium < 10) {
+        alert('资源不足！');
+        return false;
+    }
+    
+    spendResources({ steel: 50, uranium: 10 });
+    gameState.diplomacy.tradeShips++;
+    gameState.diplomacy.starMaps--;
+    
+    alert('贸易船建造完成！');
+    return true;
+}
+
+function establishTradeRoute(civilization) {
+    if (!gameState.techs.interstellar) {
+        alert('请先研发星际航行科技！');
+        return false;
+    }
+    
+    if (!gameState.diplomacy.contacts.includes(civilization)) {
+        alert('请先与该文明建立联系！');
+        return false;
+    }
+    
+    if (gameState.diplomacy.tradeShips < 1) {
+        alert('贸易船不足！');
+        return false;
+    }
+    
+    gameState.diplomacy.tradeShips--;
+    gameState.diplomacy.tradeRoutes.push(civilization);
+    
+    alert(`成功与${civilizationConfigs[civilization].name}建立贸易路线！`);
+    return true;
+}
+
+function sendExploration() {
+    if (!gameState.techs.spaceTravel) {
+        alert('请先研发航天技术！');
+        return false;
+    }
+    
+    if (gameState.resources.steel < 30 || gameState.resources.uranium < 5 || gameState.resources.tools < 20) {
+        alert('资源不足！');
+        return false;
+    }
+    
+    spendResources({ steel: 30, uranium: 5, tools: 20 });
+    
+    // 随机探险结果
+    const outcomes = [
+        { type: "resource", value: { catnip: 100, wood: 50, stone: 50 } },
+        { type: "relic", value: "ancient_artifact" },
+        { type: "territory", value: "new_land" },
+        { type: "starMap", value: 1 },
+        { type: "knowledge", value: 50 }
+    ];
+    
+    const randomOutcome = outcomes[Math.floor(Math.random() * outcomes.length)];
+    
+    // 处理探险结果
+    if (randomOutcome.type === "resource") {
+        Object.keys(randomOutcome.value).forEach(resource => {
+            gameState.resources[resource] += randomOutcome.value[resource];
+        });
+        alert(`探险队返回，发现了资源！`);
+    } else if (randomOutcome.type === "relic") {
+        gameState.exploration.relics.push(randomOutcome.value);
+        alert(`探险队返回，发现了古代遗物！`);
+    } else if (randomOutcome.type === "territory") {
+        gameState.exploration.discovered.push(randomOutcome.value);
+        alert(`探险队返回，发现了新领地！`);
+    } else if (randomOutcome.type === "starMap") {
+        gameState.diplomacy.starMaps += randomOutcome.value;
+        alert(`探险队返回，发现了星图！`);
+    } else if (randomOutcome.type === "knowledge") {
+        gameState.resources.knowledge += randomOutcome.value;
+        alert(`探险队返回，获得了知识！`);
+    }
+    
+    updateResourceDisplay();
+    return true;
+}
+
+// 太空探索系统功能
+function exploreMoon() {
+    if (!gameState.techs.spaceTravel) {
+        alert('请先研发航天技术！');
+        return false;
+    }
+    
+    if (gameState.buildings.rocket < 1) {
+        alert('请先建造火箭发射台！');
+        return false;
+    }
+    
+    if (gameState.resources.steel < 100 || gameState.resources.uranium < 50 || gameState.resources.knowledge < 200) {
+        alert('资源不足！');
+        return false;
+    }
+    
+    spendResources({ steel: 100, uranium: 50, knowledge: 200 });
+    
+    gameState.space.exploration.moon = true;
+    
+    alert('月球探索成功！现在可以建造月球基地，开采氦-3资源。');
+    return true;
+}
+
+function explorePlanet() {
+    if (!gameState.techs.interstellar) {
+        alert('请先研发星际航行科技！');
+        return false;
+    }
+    
+    if (gameState.buildings.spaceStation < 1) {
+        alert('请先建造空间站！');
+        return false;
+    }
+    
+    if (gameState.resources.steel < 200 || gameState.resources.uranium < 100 || gameState.resources.knowledge < 400) {
+        alert('资源不足！');
+        return false;
+    }
+    
+    spendResources({ steel: 200, uranium: 100, knowledge: 400 });
+    
+    const planetTypes = ["rocky", "gas", "ice", "desert", "ocean"];
+    const randomPlanet = planetTypes[Math.floor(Math.random() * planetTypes.length)];
+    gameState.space.exploration.planets.push(randomPlanet);
+    
+    alert(`行星探索成功！发现了一颗${randomPlanet}行星。`);
+    return true;
+}
+
+function exploreGalaxy() {
+    if (!gameState.techs.interstellar) {
+        alert('请先研发星际航行科技！');
+        return false;
+    }
+    
+    if (gameState.buildings.warpGate < 1) {
+        alert('请先建造虫洞门！');
+        return false;
+    }
+    
+    if (gameState.resources.steel < 500 || gameState.resources.uranium < 200 || gameState.resources.knowledge < 1000) {
+        alert('资源不足！');
+        return false;
+    }
+    
+    spendResources({ steel: 500, uranium: 200, knowledge: 1000 });
+    
+    const galaxyTypes = ["spiral", "elliptical", "irregular", "dwarf"];
+    const randomGalaxy = galaxyTypes[Math.floor(Math.random() * galaxyTypes.length)];
+    gameState.space.exploration.galaxies.push(randomGalaxy);
+    
+    alert(`星系探索成功！发现了一个${randomGalaxy}星系。`);
+    return true;
+}
+
+function contactAlien() {
+    if (!gameState.techs.interstellar) {
+        alert('请先研发星际航行科技！');
+        return false;
+    }
+    
+    if (gameState.space.exploration.galaxies.length < 1) {
+        alert('请先探索至少一个星系！');
+        return false;
+    }
+    
+    if (gameState.resources.knowledge < 500 || gameState.resources.culture < 200) {
+        alert('资源不足！');
+        return false;
+    }
+    
+    spendResources({ knowledge: 500, culture: 200 });
+    
+    const alienTypes = ["crystal", "energy", "mechanical", "organic", "psychic"];
+    const randomAlien = alienTypes[Math.floor(Math.random() * alienTypes.length)];
+    gameState.space.exploration.alienContacts.push(randomAlien);
+    
+    alert(`外星文明接触成功！发现了${randomAlien}类型的外星文明。`);
+    return true;
+}
+
+function buildSpaceStructure(structure) {
+    const buildingConfig = buildingConfigs[structure];
+    
+    if (structure === "moonBase" && !gameState.space.exploration.moon) {
+        alert('请先探索月球！');
+        return false;
+    }
+    
+    return buildBuilding(structure);
+}
 
 // 建筑配置
 const buildingConfigs = {
@@ -304,6 +715,62 @@ const buildingConfigs = {
         multiplier: 1.35,
         effect: { toolsMultiplier: 1.5 },
         maintenance: {}
+    },
+    steamEngine: {
+        name: "蒸汽发动机",
+        baseCost: { steel: 20, wood: 30, coal: 15 },
+        multiplier: 1.4,
+        effect: { electricity: 1 },
+        maintenance: { coal: 0.5 }
+    },
+    powerPlant: {
+        name: "发电厂",
+        baseCost: { steel: 50, coal: 30, tools: 20 },
+        multiplier: 1.45,
+        effect: { electricity: 3 },
+        maintenance: { coal: 1 }
+    },
+    nuclearReactor: {
+        name: "核反应堆",
+        baseCost: { steel: 100, uranium: 20, knowledge: 50 },
+        multiplier: 1.5,
+        effect: { nuclearEnergy: 5 },
+        maintenance: { uranium: 0.5 }
+    },
+    refinery: {
+        name: "精炼厂",
+        baseCost: { steel: 40, coal: 20, tools: 15 },
+        multiplier: 1.4,
+        effect: { steel: 0.5 },
+        maintenance: { electricity: 0.2 }
+    },
+    rocket: {
+        name: "火箭发射台",
+        baseCost: { steel: 100, uranium: 30, knowledge: 100 },
+        multiplier: 1.5,
+        effect: {},
+        maintenance: { electricity: 1 }
+    },
+    spaceStation: {
+        name: "空间站",
+        baseCost: { steel: 200, uranium: 50, knowledge: 200 },
+        multiplier: 1.6,
+        effect: {},
+        maintenance: { nuclearEnergy: 2 }
+    },
+    moonBase: {
+        name: "月球基地",
+        baseCost: { steel: 150, uranium: 40, knowledge: 150 },
+        multiplier: 1.55,
+        effect: { helium3: 0.5 },
+        maintenance: { nuclearEnergy: 1.5 }
+    },
+    warpGate: {
+        name: "虫洞门",
+        baseCost: { steel: 500, uranium: 100, knowledge: 500 },
+        multiplier: 1.8,
+        effect: {},
+        maintenance: { nuclearEnergy: 5 }
     }
 };
 
@@ -501,7 +968,6 @@ const techConfigs = {
         name: "心理学",
         cost: { knowledge: 150, culture: 50, faith: 30 },
         effect: () => {
-            gameState.kittens.happiness = Math.min(100, gameState.kittens.happiness + 10);
             updateResourceRates();
         }
     }
@@ -538,7 +1004,6 @@ const elements = {
     faithRate: document.getElementById('faithRate'),
     kittenCount: document.getElementById('kittenCount'),
     kittenMax: document.getElementById('kittenMax'),
-    happiness: document.getElementById('happiness'),
     farmCount: document.getElementById('farmCount'),
     lumbermillCount: document.getElementById('lumbermillCount'),
     mineCount: document.getElementById('mineCount'),
@@ -576,7 +1041,6 @@ function updateResourceDisplay() {
 function updateKittenDisplay() {
     elements.kittenCount.textContent = gameState.kittens.count;
     elements.kittenMax.textContent = gameState.kittens.max;
-    elements.happiness.textContent = gameState.kittens.happiness;
     
     // 更新职业分配显示
     const jobNames = {
@@ -623,7 +1087,7 @@ function updateResetExpectation() {
         Object.values(gameState.techs).filter(tech => tech).length * 5
     );
     
-    const expectedKarma = Math.floor(gameState.kittens.happiness * 0.1);
+    const expectedKarma = Math.floor(gameState.prestige.leadership * 0.1);
     
     elements.expectedLeadership.textContent = expectedLeadership;
     elements.expectedKarma.textContent = expectedKarma;
@@ -720,6 +1184,14 @@ function applyBuildingEffects(building) {
         gameState.resourceRates.tools += config.effect.tools;
     }
     
+    if (config.effect.electricity) {
+        gameState.resourceRates.electricity += config.effect.electricity;
+    }
+    
+    if (config.effect.nuclearEnergy) {
+        gameState.resourceRates.nuclearEnergy += config.effect.nuclearEnergy;
+    }
+    
     if (config.effect.kittens) {
         gameState.kittens.max += config.effect.kittens;
     }
@@ -747,14 +1219,80 @@ function applyBuildingEffects(building) {
     if (config.effect.toolsMultiplier) {
         gameState.resourceRates.tools *= config.effect.toolsMultiplier;
     }
+}
+
+function calculateKabbalahBonus() {
+    let productionBonus = 1;
+    let storageBonus = 1;
     
-    if (config.effect.happinessBonus) {
-        gameState.kittens.happiness = Math.min(100, gameState.kittens.happiness + config.effect.happinessBonus);
+    // 计算已解锁卡巴拉节点的加成
+    Object.keys(gameState.kabbalah).forEach(node => {
+        if (gameState.kabbalah[node]) {
+            productionBonus *= kabbalahNodes[node].productionBonus;
+            storageBonus *= kabbalahNodes[node].storageBonus;
+        }
+    });
+    
+    return { productionBonus, storageBonus };
+}
+
+function unlockKabbalahNode(node) {
+    const nodeConfig = kabbalahNodes[node];
+    
+    if (gameState.kabbalah[node]) {
+        alert('该卡巴拉节点已解锁！');
+        return false;
     }
+    
+    if (gameState.prestige.leadership < nodeConfig.leadership) {
+        alert('领导力不足！');
+        return false;
+    }
+    
+    // 检查解锁顺序（需要按顺序解锁）
+    const nodeOrder = ['malkuth', 'yesod', 'hod', 'netzach', 'tiferet', 'gevurah', 'chesed', 'binah', 'chokhmah', 'keter'];
+    const currentIndex = nodeOrder.indexOf(node);
+    
+    if (currentIndex > 0) {
+        const previousNode = nodeOrder[currentIndex - 1];
+        if (!gameState.kabbalah[previousNode]) {
+            alert(`请先解锁前一个节点：${kabbalahNodes[previousNode].name}！`);
+            return false;
+        }
+    }
+    
+    gameState.kabbalah[node] = true;
+    
+    // 更新资源上限
+    const { storageBonus } = calculateKabbalahBonus();
+    Object.keys(gameState.resourceCaps).forEach(resource => {
+        // 先移除之前的加成，再应用新的加成
+        const baseCap = {
+            catnip: 100 + (gameState.buildings.warehouse * 50) + (gameState.buildings.barn * 100),
+            wood: 100 + (gameState.buildings.warehouse * 50),
+            stone: 100 + (gameState.buildings.warehouse * 50),
+            coal: 100 + (gameState.buildings.warehouse * 50),
+            steel: 100 + (gameState.buildings.warehouse * 50),
+            uranium: 50 + (gameState.buildings.warehouse * 50),
+            knowledge: 50 + (gameState.buildings.warehouse * 50),
+            culture: 50 + (gameState.buildings.warehouse * 50),
+            faith: 50 + (gameState.buildings.warehouse * 50),
+            fur: 50 + (gameState.buildings.warehouse * 50),
+            tools: 50 + (gameState.buildings.warehouse * 50)
+        };
+        gameState.resourceCaps[resource] = Math.floor(baseCap[resource] * storageBonus);
+    });
+    
+    updateResourceRates();
+    updateResourceDisplay();
+    
+    alert(`成功解锁卡巴拉节点：${nodeConfig.name}！获得生产加成和存储上限提升！`);
+    return true;
 }
 
 function updateResourceRates() {
     const seasonBonus = gameState.season === 3 ? 0.75 : 1;
+    const { productionBonus } = calculateKabbalahBonus();
     
     gameState.resourceRates = {
         catnip: (0.5 + (gameState.buildings.farm * buildingConfigs.farm.effect.catnip)) * seasonBonus,
@@ -767,7 +1305,9 @@ function updateResourceRates() {
         culture: gameState.buildings.theater ? (gameState.buildings.theater * buildingConfigs.theater.effect.culture) : 0,
         faith: gameState.buildings.temple ? (gameState.buildings.temple * buildingConfigs.temple.effect.faith) : 0,
         fur: gameState.buildings.huntingLodge ? (gameState.buildings.huntingLodge * buildingConfigs.huntingLodge.effect.fur) : 0,
-        tools: gameState.buildings.factory ? (gameState.buildings.factory * buildingConfigs.factory.effect.tools) : 0
+        tools: gameState.buildings.factory ? (gameState.buildings.factory * buildingConfigs.factory.effect.tools) : 0,
+        electricity: 0,
+        nuclearEnergy: 0
     };
     
     // 大学加成
@@ -799,16 +1339,20 @@ function updateResourceRates() {
     // 煤炉生产煤炭
     gameState.resourceRates.coal += gameState.buildings.coalStove * buildingConfigs.coalStove.effect.coal;
     
+    // 精炼厂生产钢材
+    gameState.resourceRates.steel += gameState.buildings.refinery * buildingConfigs.refinery.effect.steel;
+    
+    // 能源生产
+    gameState.resourceRates.electricity += gameState.buildings.steamEngine * buildingConfigs.steamEngine.effect.electricity;
+    gameState.resourceRates.electricity += gameState.buildings.powerPlant * buildingConfigs.powerPlant.effect.electricity;
+    gameState.resourceRates.nuclearEnergy += gameState.buildings.nuclearReactor * buildingConfigs.nuclearReactor.effect.nuclearEnergy;
+    
     // 领导力加成
     const leadershipBonus = 1 + (gameState.prestige.leadership * 0.05);
-    Object.keys(gameState.resourceRates).forEach(resource => {
-        gameState.resourceRates[resource] *= leadershipBonus;
-    });
     
-    // 幸福度影响
-    const happinessBonus = 0.5 + (gameState.kittens.happiness / 100);
+    // 应用所有加成
     Object.keys(gameState.resourceRates).forEach(resource => {
-        gameState.resourceRates[resource] *= happinessBonus;
+        gameState.resourceRates[resource] *= leadershipBonus * productionBonus;
     });
     
     updateResourceDisplay();
@@ -822,7 +1366,6 @@ function trainKitten() {
     
     spendResources({ catnip: 20 });
     gameState.kittens.trained++;
-    gameState.kittens.happiness = Math.min(100, gameState.kittens.happiness + 5);
     
     // 每训练5次增加一只猫咪
     if (gameState.kittens.trained % 5 === 0 && gameState.kittens.count < gameState.kittens.max) {
@@ -926,7 +1469,7 @@ function calculateResetRewards() {
         Object.values(gameState.techs).filter(tech => tech).length * 5
     );
     
-    const karma = Math.floor(gameState.kittens.happiness * 0.1);
+    const karma = Math.floor(gameState.prestige.leadership * 0.1);
     
     return { leadership, karma };
 }
@@ -959,6 +1502,9 @@ function performReset() {
 }
 
 function resetGameState() {
+    // 保留卡巴拉节点状态
+    const kabbalahState = { ...gameState.kabbalah };
+    
     gameState.resources = {
         catnip: 50,
         wood: 20,
@@ -970,7 +1516,9 @@ function resetGameState() {
         culture: 0,
         faith: 0,
         fur: 0,
-        tools: 0
+        tools: 0,
+        electricity: 0,
+        nuclearEnergy: 0
     };
     
     gameState.resourceCaps = {
@@ -984,7 +1532,9 @@ function resetGameState() {
         culture: 50,
         faith: 50,
         fur: 50,
-        tools: 50
+        tools: 50,
+        electricity: 50,
+        nuclearEnergy: 25
     };
     
     gameState.buildings = {
@@ -1003,13 +1553,16 @@ function resetGameState() {
         factory: 0,
         house: 0,
         barn: 0,
-        workshop: 0
+        workshop: 0,
+        steamEngine: 0,
+        powerPlant: 0,
+        nuclearReactor: 0,
+        refinery: 0
     };
     
     gameState.kittens = {
         count: 1,
         max: 5,
-        happiness: 80,
         trained: 0,
         jobs: {
             farmer: 0,
@@ -1053,6 +1606,9 @@ function resetGameState() {
         philosophy: false,
         psychology: false
     };
+    
+    // 恢复卡巴拉节点状态
+    gameState.kabbalah = kabbalahState;
     
     gameState.season = 0;
     gameState.seasonTime = 0;
@@ -1129,17 +1685,7 @@ function gameLoop() {
     const catnipConsumption = gameState.kittens.count * 0.05 / 10;
     if (gameState.resources.catnip >= catnipConsumption) {
         gameState.resources.catnip -= catnipConsumption;
-    } else {
-        // 饥饿状态，效率降低
-        gameState.kittens.happiness = Math.max(0, gameState.kittens.happiness - 0.1);
     }
-    
-    if (gameState.prestige.karma > 0) {
-        gameState.kittens.happiness = Math.min(100, gameState.kittens.happiness + (gameState.prestige.karma * 0.01));
-    }
-    
-    // 幸福度自然衰减
-    gameState.kittens.happiness = Math.max(0, gameState.kittens.happiness - 0.05);
     
     updateResourceDisplay();
     updateKittenDisplay();
