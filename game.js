@@ -8,6 +8,18 @@ const Game = {
         catSnack: { amount: 0, rate: 0 },
         catToy: { amount: 0, rate: 0 },
         catCoin: { amount: 0, rate: 0 },
+        mineral: { amount: 0, rate: 0 },
+        ironOre: { amount: 0, rate: 0 },
+        copperOre: { amount: 0, rate: 0 },
+        goldOre: { amount: 0, rate: 0 },
+        ironIngot: { amount: 0, rate: 0 },
+        copperIngot: { amount: 0, rate: 0 },
+        goldIngot: { amount: 0, rate: 0 },
+        oil: { amount: 0, rate: 0 },
+        plastic: { amount: 0, rate: 0 },
+        electronicParts: { amount: 0, rate: 0 },
+        advancedMaterial: { amount: 0, rate: 0 },
+        researchPoints: { amount: 0, rate: 0 },
         population: { amount: 1, rate: 0 },
         maxPopulation: { amount: 5, rate: 0 }
     },
@@ -37,8 +49,8 @@ const Game = {
             name: "小屋",
             count: 0,
             cost: { catnip: 100, catnipWood: 20 },
-            description: "增加人口上限",
-            effect: { maxPopulation: 5 },
+            description: "增加1名小猫咪工人",
+            effect: { maxPopulation: 1 },
             workers: 0,
             maxWorkers: 0
         },
@@ -85,10 +97,10 @@ const Game = {
             name: "图书馆",
             count: 0,
             cost: { catnip: 600, catnipWood: 200, catCoin: 50 },
-            description: "提高科技研究效率",
-            effect: { techSpeed: 0.2 },
+            description: "生产研究点数，需要科学家才能工作",
+            production: { researchPoints: 1 },
             workers: 0,
-            maxWorkers: 1
+            maxWorkers: 2
         },
         adventureCamp: {
             name: "探险营",
@@ -98,6 +110,105 @@ const Game = {
             effect: { exploration: 0.1 },
             workers: 0,
             maxWorkers: 3
+        },
+        lumberMill: {
+            name: "伐木场",
+            count: 0,
+            cost: { catnip: 300 },
+            description: "生产猫薄荷木，需要伐木工才能工作",
+            production: { catnipWood: 1 },
+            workers: 0,
+            maxWorkers: 2
+        },
+        mine: {
+            name: "矿场",
+            count: 0,
+            cost: { catnip: 500, catnipWood: 100 },
+            description: "生产矿产资源，需要矿工才能工作",
+            production: { mineral: 0.5 },
+            input: { catnip: 2 }, // 持续消耗猫薄荷
+            workers: 0,
+            maxWorkers: 2
+        },
+        ironMine: {
+            name: "铁矿",
+            count: 0,
+            cost: { catnip: 1000, catnipWood: 300, mineral: 100 },
+            description: "生产铁矿石，需要矿工才能工作",
+            production: { ironOre: 0.5 },
+            input: { catnip: 3 }, // 持续消耗猫薄荷
+            workers: 0,
+            maxWorkers: 3
+        },
+        copperMine: {
+            name: "铜矿",
+            count: 0,
+            cost: { catnip: 1500, catnipWood: 500, ironOre: 100 },
+            description: "生产铜矿石，需要矿工才能工作",
+            production: { copperOre: 0.5 },
+            input: { catnip: 4 }, // 持续消耗猫薄荷
+            workers: 0,
+            maxWorkers: 3
+        },
+        goldMine: {
+            name: "金矿",
+            count: 0,
+            cost: { catnip: 2500, catnipWood: 800, copperOre: 200 },
+            description: "生产金矿石，需要矿工才能工作",
+            production: { goldOre: 0.3 },
+            input: { catnip: 5 }, // 持续消耗猫薄荷
+            workers: 0,
+            maxWorkers: 4
+        },
+        smelter: {
+            name: "冶炼厂",
+            count: 0,
+            cost: { catnip: 800, catnipWood: 200, mineral: 150 },
+            description: "将矿石冶炼成锭，需要工人才能工作",
+            production: { ironIngot: 0.4, copperIngot: 0.4 },
+            input: { ironOre: 2, copperOre: 2, catnip: 5 }, // 持续消耗资源
+            workers: 0,
+            maxWorkers: 3
+        },
+        oilWell: {
+            name: "油井",
+            count: 0,
+            cost: { catnip: 3000, ironIngot: 300, copperIngot: 200 },
+            description: "开采石油，需要工人才能工作",
+            production: { oil: 0.3 },
+            input: { catnip: 8, ironIngot: 0.1 }, // 持续消耗资源
+            workers: 0,
+            maxWorkers: 4
+        },
+        refinery: {
+            name: "精炼厂",
+            count: 0,
+            cost: { catnip: 5000, ironIngot: 500, oil: 200 },
+            description: "将石油精炼成塑料和其他产品，需要工人才能工作",
+            production: { plastic: 0.4, electronicParts: 0.2 },
+            input: { oil: 2, copperIngot: 1, catnip: 10 }, // 持续消耗资源
+            workers: 0,
+            maxWorkers: 5
+        },
+        advancedFactory: {
+            name: "高级工厂",
+            count: 0,
+            cost: { catnip: 10000, ironIngot: 800, plastic: 500, electronicParts: 300 },
+            description: "生产高级材料，需要工人才能工作",
+            production: { advancedMaterial: 0.2 },
+            input: { ironIngot: 2, copperIngot: 2, plastic: 3, electronicParts: 1, catnip: 15 }, // 持续消耗资源
+            workers: 0,
+            maxWorkers: 6
+        },
+        nuclearPlant: {
+            name: "核电站",
+            count: 0,
+            cost: { catnip: 20000, advancedMaterial: 1000, electronicParts: 800 },
+            description: "提供大量能源，需要工人才能工作",
+            production: { catnip: 10 }, // 生产猫薄荷作为能源产物
+            input: { advancedMaterial: 0.5, electronicParts: 0.3, catnip: 20 }, // 持续消耗大量资源
+            workers: 0,
+            maxWorkers: 8
         }
     },
     
@@ -109,8 +220,18 @@ const Game = {
         { id: "chef", name: "厨师", building: "restaurant" },
         { id: "toyMaker", name: "玩具师", building: "toyFactory" },
         { id: "merchant", name: "商人", building: "market" },
-        { id: "scholar", name: "学者", building: "library" },
-        { id: "adventurer", name: "探险家", building: "adventureCamp" }
+        { id: "scientist", name: "科学家", building: "library" },
+        { id: "adventurer", name: "探险家", building: "adventureCamp" },
+        { id: "lumberjack", name: "伐木工", building: "lumberMill" },
+        { id: "miner", name: "矿工", building: "mine" },
+        { id: "ironMiner", name: "铁矿工", building: "ironMine" },
+        { id: "copperMiner", name: "铜矿工", building: "copperMine" },
+        { id: "goldMiner", name: "金矿工", building: "goldMine" },
+        { id: "smelterWorker", name: "冶炼工", building: "smelter" },
+        { id: "oilWorker", name: "石油工人", building: "oilWell" },
+        { id: "refineryWorker", name: "精炼工人", building: "refinery" },
+        { id: "advancedWorker", name: "高级工人", building: "advancedFactory" },
+        { id: "nuclearEngineer", name: "核工程师", building: "nuclearPlant" }
     ],
     
     // 科技树数据
@@ -118,6 +239,9 @@ const Game = {
         advancedFarming: {
             name: "高级农业",
             unlocked: false,
+            isResearching: false,
+            progress: 0,
+            requiredPoints: 100,
             cost: { catnip: 200, catnipWood: 50 },
             description: "提高猫薄荷田产量",
             effect: { building: "catnipFarm", productionMultiplier: 1.5 }
@@ -125,6 +249,9 @@ const Game = {
         efficientRefining: {
             name: "高效精炼",
             unlocked: false,
+            isResearching: false,
+            progress: 0,
+            requiredPoints: 200,
             cost: { catnip: 300, catnipWood: 100, fish: 50 },
             description: "提高精炼厂产量",
             effect: { building: "refinery", productionMultiplier: 1.5 }
@@ -132,6 +259,9 @@ const Game = {
         improvedHousing: {
             name: "改良住房",
             unlocked: false,
+            isResearching: false,
+            progress: 0,
+            requiredPoints: 300,
             cost: { catnip: 500, catnipWood: 200 },
             description: "提高小屋的人口上限",
             effect: { building: "cottage", effectMultiplier: 1.5 }
@@ -139,6 +269,9 @@ const Game = {
         advancedFishing: {
             name: "高级渔业",
             unlocked: false,
+            isResearching: false,
+            progress: 0,
+            requiredPoints: 400,
             cost: { catnip: 400, catnipWood: 150, fish: 100 },
             description: "提高鱼场产量",
             effect: { building: "fishFarm", productionMultiplier: 1.5 }
@@ -146,6 +279,9 @@ const Game = {
         advancedCooking: {
             name: "高级烹饪",
             unlocked: false,
+            isResearching: false,
+            progress: 0,
+            requiredPoints: 500,
             cost: { catnip: 500, catnipWood: 100, fish: 150 },
             description: "提高餐厅产量",
             effect: { building: "restaurant", productionMultiplier: 1.5 }
@@ -153,6 +289,9 @@ const Game = {
         nutritiousSnacks: {
             name: "营养零食",
             unlocked: false,
+            isResearching: false,
+            progress: 0,
+            requiredPoints: 600,
             cost: { catnip: 600, catnipWood: 120, catSnack: 100 },
             description: "猫零食提高人口增长",
             effect: { populationGrowth: 0.2 }
@@ -160,6 +299,9 @@ const Game = {
         advancedToyMaking: {
             name: "高级玩具制造",
             unlocked: false,
+            isResearching: false,
+            progress: 0,
+            requiredPoints: 700,
             cost: { catnip: 700, catnipWood: 180, fish: 200 },
             description: "提高玩具厂产量",
             effect: { building: "toyFactory", productionMultiplier: 1.5 }
@@ -167,6 +309,9 @@ const Game = {
         educationalToys: {
             name: "教育玩具",
             unlocked: false,
+            isResearching: false,
+            progress: 0,
+            requiredPoints: 800,
             cost: { catnip: 800, catnipWood: 200, catToy: 150 },
             description: "猫玩具提高科技研究速度",
             effect: { techSpeed: 0.3 }
@@ -174,6 +319,9 @@ const Game = {
         efficientTrading: {
             name: "高效贸易",
             unlocked: false,
+            isResearching: false,
+            progress: 0,
+            requiredPoints: 900,
             cost: { catnip: 900, catnipWood: 250, catCoin: 100 },
             description: "提高市场产量",
             effect: { building: "market", productionMultiplier: 1.5 }
@@ -181,6 +329,9 @@ const Game = {
         catEconomy: {
             name: "猫币经济",
             unlocked: false,
+            isResearching: false,
+            progress: 0,
+            requiredPoints: 1000,
             cost: { catnip: 1000, catnipWood: 300, catCoin: 200 },
             description: "使用猫币降低建筑成本",
             effect: { buildingCostReduction: 0.2 }
@@ -188,6 +339,9 @@ const Game = {
         advancedLearning: {
             name: "高级学习",
             unlocked: false,
+            isResearching: false,
+            progress: 0,
+            requiredPoints: 1100,
             cost: { catnip: 1100, catnipWood: 350, catCoin: 250 },
             description: "进一步提高图书馆研究速度",
             effect: { building: "library", effectMultiplier: 2 }
@@ -195,6 +349,9 @@ const Game = {
         explorationTechniques: {
             name: "探索技巧",
             unlocked: false,
+            isResearching: false,
+            progress: 0,
+            requiredPoints: 1200,
             cost: { catnip: 1200, catnipWood: 400, catToy: 300 },
             description: "提高探险营发现资源的频率",
             effect: { building: "adventureCamp", effectMultiplier: 1.5 }
@@ -202,6 +359,9 @@ const Game = {
         treasureHunting: {
             name: "寻宝",
             unlocked: false,
+            isResearching: false,
+            progress: 0,
+            requiredPoints: 1300,
             cost: { catnip: 1300, catnipWood: 450, catCoin: 350 },
             description: "提高探险营发现资源的质量",
             effect: { explorationQuality: 1.5 }
@@ -209,6 +369,9 @@ const Game = {
         resourceEfficiency: {
             name: "资源效率",
             unlocked: false,
+            isResearching: false,
+            progress: 0,
+            requiredPoints: 1400,
             cost: { catnip: 1400, catnipWood: 500, catCoin: 400 },
             description: "降低所有建筑的输入成本",
             effect: { inputReduction: 0.3 }
@@ -216,9 +379,152 @@ const Game = {
         automation: {
             name: "自动化",
             unlocked: false,
+            isResearching: false,
+            progress: 0,
+            requiredPoints: 1500,
             cost: { catnip: 1500, catnipWood: 550, catCoin: 450 },
             description: "提高建筑产量而不需要更多工人",
             effect: { automationBonus: 0.4 }
+        },
+        ironMining: {
+            name: "铁矿开采",
+            unlocked: false,
+            isResearching: false,
+            progress: 0,
+            requiredPoints: 1600,
+            cost: { catnip: 2000, catnipWood: 800, mineral: 300, researchPoints: 50 },
+            description: "解锁铁矿开采技术",
+            effect: { unlockBuilding: "ironMine" }
+        },
+        copperMining: {
+            name: "铜矿开采",
+            unlocked: false,
+            isResearching: false,
+            progress: 0,
+            requiredPoints: 1700,
+            cost: { catnip: 2500, catnipWood: 1000, ironOre: 200, researchPoints: 80 },
+            description: "解锁铜矿开采技术",
+            effect: { unlockBuilding: "copperMine" }
+        },
+        goldMining: {
+            name: "金矿开采",
+            unlocked: false,
+            isResearching: false,
+            progress: 0,
+            requiredPoints: 1800,
+            cost: { catnip: 3500, catnipWood: 1500, copperOre: 300, researchPoints: 120 },
+            description: "解锁金矿开采技术",
+            effect: { unlockBuilding: "goldMine" }
+        },
+        advancedSmelting: {
+            name: "高级冶炼",
+            unlocked: false,
+            isResearching: false,
+            progress: 0,
+            requiredPoints: 1900,
+            cost: { catnip: 4000, ironOre: 400, copperOre: 300, researchPoints: 150 },
+            description: "解锁高级冶炼技术，提高冶炼厂效率",
+            effect: { building: "smelter", productionMultiplier: 1.5, unlockBuilding: "smelter" }
+        },
+        oilExtraction: {
+            name: "石油提取",
+            unlocked: false,
+            isResearching: false,
+            progress: 0,
+            requiredPoints: 2000,
+            cost: { catnip: 5000, ironIngot: 500, copperIngot: 400, researchPoints: 200 },
+            description: "解锁石油提取技术",
+            effect: { unlockBuilding: "oilWell" }
+        },
+        oilRefining: {
+            name: "石油精炼",
+            unlocked: false,
+            isResearching: false,
+            progress: 0,
+            requiredPoints: 2100,
+            cost: { catnip: 6000, ironIngot: 600, oil: 300, researchPoints: 250 },
+            description: "解锁石油精炼技术",
+            effect: { unlockBuilding: "refinery" }
+        },
+        advancedMaterials: {
+            name: "高级材料",
+            unlocked: false,
+            isResearching: false,
+            progress: 0,
+            requiredPoints: 2200,
+            cost: { catnip: 8000, plastic: 500, electronicParts: 400, researchPoints: 300 },
+            description: "解锁高级材料生产技术",
+            effect: { unlockBuilding: "advancedFactory" }
+        },
+        nuclearEnergy: {
+            name: "核能技术",
+            unlocked: false,
+            isResearching: false,
+            progress: 0,
+            requiredPoints: 2300,
+            cost: { catnip: 10000, advancedMaterial: 500, electronicParts: 600, researchPoints: 400 },
+            description: "解锁核能技术",
+            effect: { unlockBuilding: "nuclearPlant" }
+        },
+        resourceEfficiency2: {
+            name: "资源效率II",
+            unlocked: false,
+            isResearching: false,
+            progress: 0,
+            requiredPoints: 2400,
+            cost: { catnip: 12000, advancedMaterial: 600, goldIngot: 200, researchPoints: 500 },
+            description: "进一步降低所有建筑的输入成本",
+            effect: { inputReduction: 0.5 }
+        },
+        automation2: {
+            name: "高级自动化",
+            unlocked: false,
+            isResearching: false,
+            progress: 0,
+            requiredPoints: 2500,
+            cost: { catnip: 15000, advancedMaterial: 800, electronicParts: 700, researchPoints: 600 },
+            description: "进一步提高建筑产量而不需要更多工人",
+            effect: { automationBonus: 0.8 }
+        },
+        superEfficiency: {
+            name: "超级效率",
+            unlocked: false,
+            isResearching: false,
+            progress: 0,
+            requiredPoints: 2600,
+            cost: { catnip: 20000, advancedMaterial: 1000, goldIngot: 500, researchPoints: 800 },
+            description: "极大提高建筑产量和资源效率",
+            effect: { productionMultiplier: 2, inputReduction: 0.7 }
+        },
+        catnipSynthesis: {
+            name: "猫薄荷合成",
+            unlocked: false,
+            isResearching: false,
+            progress: 0,
+            requiredPoints: 2700,
+            cost: { catnip: 25000, plastic: 1500, electronicParts: 1000, researchPoints: 1000 },
+            description: "解锁猫薄荷合成技术，使用高级材料合成猫薄荷",
+            effect: { unlockBuilding: "catnipSynthesizer" }
+        },
+        advancedPopulation: {
+            name: "高级人口增长",
+            unlocked: false,
+            isResearching: false,
+            progress: 0,
+            requiredPoints: 2800,
+            cost: { catnip: 30000, advancedMaterial: 1200, goldIngot: 600, researchPoints: 1200 },
+            description: "提高小屋的人口上限",
+            effect: { building: "cottage", effectMultiplier: 3 }
+        },
+        ultimateResearch: {
+            name: "终极研究",
+            unlocked: false,
+            isResearching: false,
+            progress: 0,
+            requiredPoints: 3000,
+            cost: { catnip: 50000, advancedMaterial: 2000, goldIngot: 1000, researchPoints: 2000 },
+            description: "解锁终极研究技术，极大提高研究点数生产",
+            effect: { building: "library", productionMultiplier: 5 }
         }
     },
     
@@ -411,14 +717,20 @@ const Game = {
     
     // 初始化游戏
     init: function() {
+        // 自动加载游戏
+        this.autoLoad();
         this.setupEventListeners();
         this.updateUI();
         this.startGameLoop();
         this.generateBuildings();
         this.generateJobs();
         this.generateTechnologies();
-        this.generateTasks('main');
-        this.generateTasks('daily');
+        
+        // 设置定期自动保存（每30秒）
+        this.autoSaveInterval = setInterval(() => this.autoSave(), 30000);
+        
+        // 页面关闭前自动保存
+        window.addEventListener('beforeunload', () => this.autoSave());
     },
     
     // 设置事件监听器
@@ -458,8 +770,7 @@ const Game = {
             this.handleEventOption(1);
         });
         
-        // 贸易系统事件监听器
-        this.setupTradeEventListeners();
+        
     },
     
     // 设置贸易系统事件监听器
@@ -854,7 +1165,30 @@ const Game = {
         
         this.calculateProduction();
         this.produceResources(deltaTime);
-        this.checkTasks();
+        
+        // 更新研究进度
+        for (let techId in this.technologies) {
+            const tech = this.technologies[techId];
+            if (tech.isResearching && !tech.unlocked) {
+                // 使用研究点数推进研究进度
+                if (this.resources.researchPoints.amount > 0) {
+                    const pointsToUse = Math.min(this.resources.researchPoints.amount, deltaTime * this.resources.researchPoints.rate);
+                    tech.progress += pointsToUse;
+                    this.resources.researchPoints.amount -= pointsToUse;
+                    
+                    // 确保资源不会为负数
+                    this.resources.researchPoints.amount = Math.max(0, this.resources.researchPoints.amount);
+                }
+                
+                // 检查研究是否完成
+                if (tech.progress >= tech.requiredPoints) {
+                    tech.unlocked = true;
+                    tech.isResearching = false;
+                    this.calculateProduction();
+                }
+            }
+        }
+        
         this.checkEventTrigger();
         this.updateUI();
     },
@@ -866,38 +1200,111 @@ const Game = {
             this.resources[resource].rate = 0;
         }
         
-        // 计算建筑生产
+        // 计算建筑生产和消耗
         for (let buildingId in this.buildings) {
             const building = this.buildings[buildingId];
-            if (building.count > 0 && building.production) {
-                for (let resource in building.production) {
-                    // 考虑工人数量和科技加成
-                    const workerMultiplier = building.workers / building.maxWorkers || 1;
-                    const techMultiplier = this.getTechMultiplier(buildingId, 'productionMultiplier') || 1;
-                    this.resources[resource].rate += building.production[resource] * building.count * workerMultiplier * techMultiplier;
+            if (building.count > 0) {
+                // 计算建筑生产
+                if (building.production) {
+                    for (let resource in building.production) {
+                        // 考虑工人数量和科技加成
+                        const workerMultiplier = building.workers / building.maxWorkers || 1;
+                        const techMultiplier = this.getTechMultiplier(buildingId, 'productionMultiplier') || 1;
+                        const automationBonus = this.getTechMultiplier(buildingId, 'automationBonus') || 1;
+                        const productionMultiplier = this.getTechMultiplier(buildingId, 'productionMultiplier') || 1;
+                        
+                        // 计算总产量
+                        let production = building.production[resource] * building.count * workerMultiplier * techMultiplier * automationBonus * productionMultiplier;
+                        this.resources[resource].rate += production;
+                    }
                 }
-            }
-            
-            // 计算建筑效果
-            if (building.count > 0 && building.effect) {
-                for (let resource in building.effect) {
-                    const techMultiplier = this.getTechMultiplier(buildingId, 'effectMultiplier') || 1;
-                    this.resources[resource].amount = building.effect[resource] * building.count * techMultiplier;
+                
+                // 计算建筑消耗
+                if (building.input) {
+                    for (let resource in building.input) {
+                        // 考虑工人数量和科技加成
+                        const workerMultiplier = building.workers / building.maxWorkers || 1;
+                        const inputReduction = this.getTechMultiplier(buildingId, 'inputReduction') || 1;
+                        
+                        // 计算总消耗（负值）
+                        let consumption = building.input[resource] * building.count * workerMultiplier * inputReduction;
+                        this.resources[resource].rate -= consumption;
+                    }
+                }
+                
+                // 计算建筑效果
+                if (building.count > 0 && building.effect) {
+                    for (let resource in building.effect) {
+                        const techMultiplier = this.getTechMultiplier(buildingId, 'effectMultiplier') || 1;
+                        if (resource === 'maxPopulation') {
+                            // 对于人口上限，设置为建筑数量乘以效果值
+                            this.resources[resource].amount = building.effect[resource] * building.count * techMultiplier;
+                            // 同时增加人口数量，确保人口与上限匹配
+                            this.resources.population.amount = this.resources.maxPopulation.amount;
+                        } else {
+                            this.resources[resource].amount = building.effect[resource] * building.count * techMultiplier;
+                        }
+                    }
                 }
             }
         }
         
-        // 人口增长速率
-        this.resources.population.rate = Math.max(0, 0.1 * (this.resources.population.amount / this.resources.maxPopulation.amount));
+        // 取消人口自然增长
+        this.resources.population.rate = 0;
+        
+        // 计算工人消耗猫薄荷
+        const totalWorkers = this.getTotalWorkers();
+        let catnipConsumption = 0;
+        
+        if (totalWorkers <= 5) {
+            // 5名及以下工人，每人每秒消耗5猫薄荷
+            catnipConsumption = totalWorkers * 5;
+        } else {
+            // 5名以上工人，前5名每人5，新增每人10
+            catnipConsumption = 5 * 5 + (totalWorkers - 5) * 10;
+        }
+        
+        // 设置猫薄荷消耗速率（负值）
+        this.resources.catnip.rate -= catnipConsumption;
     },
     
     // 生产资源
     produceResources: function(deltaTime) {
+        // 先检查所有建筑的输入需求是否满足
+        let canProduce = {};
+        for (let buildingId in this.buildings) {
+            const building = this.buildings[buildingId];
+            canProduce[buildingId] = true;
+            
+            // 检查建筑是否有输入需求且资源是否足够
+            if (building.count > 0 && building.input) {
+                for (let resource in building.input) {
+                    const requiredPerSecond = building.input[resource] * building.count * (building.workers / building.maxWorkers || 1);
+                    if (this.resources[resource].amount < requiredPerSecond * deltaTime) {
+                        canProduce[buildingId] = false;
+                        break;
+                    }
+                }
+            }
+        }
+        
+        // 生产资源
         for (let resource in this.resources) {
             if (resource !== 'maxPopulation') {
-                this.resources[resource].amount += this.resources[resource].rate * deltaTime;
+                let productionRate = this.resources[resource].rate;
+                
+                // 如果是消耗型资源，确保不会超过当前拥有量
+                if (productionRate < 0) {
+                    const maxConsumption = this.resources[resource].amount / deltaTime;
+                    productionRate = Math.max(productionRate, -maxConsumption);
+                }
+                
+                // 更新资源数量
+                this.resources[resource].amount += productionRate * deltaTime;
+                
                 // 确保资源不会是负数
                 this.resources[resource].amount = Math.max(0, this.resources[resource].amount);
+                
                 // 人口不能超过上限
                 if (resource === 'population') {
                     this.resources[resource].amount = Math.min(this.resources[resource].amount, this.resources.maxPopulation.amount);
@@ -911,16 +1318,47 @@ const Game = {
         let multiplier = 1;
         for (let techId in this.technologies) {
             const tech = this.technologies[techId];
-            if (tech.unlocked && tech.effect && tech.effect.building === buildingId && tech.effect[multiplierType]) {
-                multiplier *= tech.effect[multiplierType];
+            if (tech.unlocked && tech.effect) {
+                // 全局科技加成
+                if (tech.effect[multiplierType] && !tech.effect.building) {
+                    multiplier *= tech.effect[multiplierType];
+                }
+                // 特定建筑科技加成
+                else if (tech.effect.building === buildingId && tech.effect[multiplierType]) {
+                    multiplier *= tech.effect[multiplierType];
+                }
             }
         }
         return multiplier;
     },
     
+    // 检查建筑是否已解锁
+    isBuildingUnlocked: function(buildingId) {
+        // 基础建筑默认解锁
+        const basicBuildings = ['catnipFarm', 'refinery', 'cottage', 'fishFarm', 'restaurant', 'toyFactory', 'market', 'library', 'adventureCamp', 'lumberMill', 'mine'];
+        if (basicBuildings.includes(buildingId)) {
+            return true;
+        }
+        
+        // 检查是否有科技解锁了该建筑
+        for (let techId in this.technologies) {
+            const tech = this.technologies[techId];
+            if (tech.unlocked && tech.effect && tech.effect.unlockBuilding === buildingId) {
+                return true;
+            }
+        }
+        
+        return false;
+    },
+    
     // 购买建筑
     buyBuilding: function(buildingId) {
         const building = this.buildings[buildingId];
+        
+        // 检查建筑是否已解锁
+        if (!this.isBuildingUnlocked(buildingId)) {
+            return false;
+        }
         
         // 检查资源是否足够
         for (let resource in building.cost) {
@@ -944,6 +1382,9 @@ const Game = {
         
         this.calculateProduction();
         this.updateUI();
+        
+        // 自动保存游戏
+        this.autoSave();
         return true;
     },
     
@@ -951,15 +1392,22 @@ const Game = {
     assignWorker: function(buildingId, direction) {
         const building = this.buildings[buildingId];
         const availableWorkers = this.resources.population.amount - this.getTotalWorkers();
+        let hasChanged = false;
         
         if (direction === '+' && availableWorkers > 0 && building.workers < building.maxWorkers * building.count) {
             building.workers++;
+            hasChanged = true;
         } else if (direction === '-' && building.workers > 0) {
             building.workers--;
+            hasChanged = true;
         }
         
-        this.calculateProduction();
-        this.updateUI();
+        if (hasChanged) {
+            this.calculateProduction();
+            this.updateUI();
+            // 自动保存游戏
+            this.autoSave();
+        }
     },
     
     // 获取当前总工人数量
@@ -975,8 +1423,8 @@ const Game = {
     researchTech: function(techId) {
         const tech = this.technologies[techId];
         
-        // 检查科技是否已解锁
-        if (tech.unlocked) return false;
+        // 检查科技是否已解锁或正在研究
+        if (tech.unlocked || tech.isResearching) return false;
         
         // 检查资源是否足够
         for (let resource in tech.cost) {
@@ -990,11 +1438,13 @@ const Game = {
             this.resources[resource].amount -= tech.cost[resource];
         }
         
-        // 解锁科技
-        tech.unlocked = true;
+        // 开始研究
+        tech.isResearching = true;
+        tech.progress = 0;
         
-        this.calculateProduction();
         this.updateUI();
+        // 自动保存游戏
+        this.autoSave();
         return true;
     },
     
@@ -1015,27 +1465,45 @@ const Game = {
         const div = document.createElement('div');
         div.className = 'building-item';
         
+        // 检查建筑是否已解锁
+        const isUnlocked = this.isBuildingUnlocked(buildingId);
+        
         // 构建成本文本
         let costText = '成本: ';
         for (let resource in building.cost) {
             costText += `${resource}: ${building.cost[resource]} `;
         }
         
+        // 构建输入消耗文本
+        let inputText = '';
+        if (building.input) {
+            inputText = '持续消耗: ';
+            for (let resource in building.input) {
+                inputText += `${resource}: ${building.input[resource]}/s `;
+            }
+        }
+        
+        // 构建建筑HTML
         div.innerHTML = `
             <div class="building-header">
                 <span class="building-name">${building.name}</span>
                 <span class="building-count">${building.count}</span>
             </div>
             <div class="building-description">${building.description}</div>
+            ${inputText ? `<div class="building-input">${inputText}</div>` : ''}
             <div class="building-cost">${costText}</div>
-            <button class="building-btn" id="build_${buildingId}">建造</button>
+            <button class="building-btn ${!isUnlocked ? 'locked' : ''}" id="build_${buildingId}" ${!isUnlocked ? 'disabled' : ''}>
+                ${!isUnlocked ? '未解锁' : '建造'}
+            </button>
         `;
         
         // 添加建造按钮事件
-        div.querySelector(`#build_${buildingId}`).addEventListener('click', () => {
-            this.buyBuilding(buildingId);
-            this.generateBuildings();
-        });
+        if (isUnlocked) {
+            div.querySelector(`#build_${buildingId}`).addEventListener('click', () => {
+                this.buyBuilding(buildingId);
+                this.generateBuildings();
+            });
+        }
         
         return div;
     },
@@ -1121,17 +1589,34 @@ const Game = {
             costText += `${resource}: ${tech.cost[resource]} `;
         }
         
+        // 构建研究进度HTML
+        let researchProgressHTML = '';
+        if (tech.isResearching) {
+            const progressPercent = Math.min(100, (tech.progress / tech.requiredPoints) * 100);
+            researchProgressHTML = `
+                <div class="tech-progress-container">
+                    <div class="tech-progress-bar">
+                        <div class="tech-progress-fill" style="width: ${progressPercent}%"></div>
+                    </div>
+                    <div class="tech-progress-text">
+                        ${Math.floor(tech.progress)}/${tech.requiredPoints} 研究点数
+                    </div>
+                </div>
+            `;
+        }
+        
         div.innerHTML = `
             <div class="tech-name">${tech.name}</div>
             <div class="tech-description">${tech.description}</div>
             <div class="tech-cost">${costText}</div>
-            <button class="tech-btn ${tech.unlocked ? 'unlocked' : ''}" id="tech_${techId}" ${tech.unlocked ? 'disabled' : ''}>
-                ${tech.unlocked ? '已解锁' : '研究'}
+            ${researchProgressHTML}
+            <button class="tech-btn ${tech.unlocked ? 'unlocked' : ''} ${tech.isResearching ? 'researching' : ''}" id="tech_${techId}" ${tech.unlocked || tech.isResearching ? 'disabled' : ''}>
+                ${tech.unlocked ? '已解锁' : tech.isResearching ? '研究中' : '研究'}
             </button>
         `;
         
         // 添加研究按钮事件
-        if (!tech.unlocked) {
+        if (!tech.unlocked && !tech.isResearching) {
             div.querySelector(`#tech_${techId}`).addEventListener('click', () => {
                 this.researchTech(techId);
                 this.generateTechnologies();
@@ -1162,6 +1647,12 @@ const Game = {
         document.getElementById('catCoin').textContent = this.resources.catCoin.amount.toFixed(0);
         document.getElementById('catCoinRate').textContent = `+${this.resources.catCoin.rate.toFixed(1)}/s`;
         
+        document.getElementById('mineral').textContent = this.resources.mineral.amount.toFixed(0);
+        document.getElementById('mineralRate').textContent = `+${this.resources.mineral.rate.toFixed(1)}/s`;
+        
+        document.getElementById('researchPoints').textContent = this.resources.researchPoints.amount.toFixed(0);
+        document.getElementById('researchPointsRate').textContent = `+${this.resources.researchPoints.rate.toFixed(1)}/s`;
+        
         document.getElementById('population').textContent = this.resources.population.amount.toFixed(0);
         document.getElementById('populationRate').textContent = `+${this.resources.population.rate.toFixed(1)}/s`;
         
@@ -1182,6 +1673,16 @@ const Game = {
         alert('游戏已保存');
     },
     
+    // 自动保存游戏
+    autoSave: function() {
+        const gameData = {
+            resources: this.resources,
+            buildings: this.buildings,
+            technologies: this.technologies
+        };
+        localStorage.setItem('catCityBuilderSave', JSON.stringify(gameData));
+    },
+    
     // 加载游戏
     loadGame: function() {
         const savedData = localStorage.getItem('catCityBuilderSave');
@@ -1198,6 +1699,18 @@ const Game = {
         }
     },
     
+    // 自动加载游戏
+    autoLoad: function() {
+        const savedData = localStorage.getItem('catCityBuilderSave');
+        if (savedData) {
+            const gameData = JSON.parse(savedData);
+            this.resources = gameData.resources;
+            this.buildings = gameData.buildings;
+            this.technologies = gameData.technologies;
+            this.calculateProduction();
+        }
+    },
+    
     // 重置游戏
     resetGame: function() {
         if (confirm('确定要重置游戏吗？所有进度将丢失！')) {
@@ -1209,6 +1722,18 @@ const Game = {
                 catSnack: { amount: 0, rate: 0 },
                 catToy: { amount: 0, rate: 0 },
                 catCoin: { amount: 0, rate: 0 },
+                mineral: { amount: 0, rate: 0 },
+                ironOre: { amount: 0, rate: 0 },
+                copperOre: { amount: 0, rate: 0 },
+                goldOre: { amount: 0, rate: 0 },
+                ironIngot: { amount: 0, rate: 0 },
+                copperIngot: { amount: 0, rate: 0 },
+                goldIngot: { amount: 0, rate: 0 },
+                oil: { amount: 0, rate: 0 },
+                plastic: { amount: 0, rate: 0 },
+                electronicParts: { amount: 0, rate: 0 },
+                advancedMaterial: { amount: 0, rate: 0 },
+                researchPoints: { amount: 0, rate: 0 },
                 population: { amount: 1, rate: 0 },
                 maxPopulation: { amount: 5, rate: 0 }
             };
@@ -1238,8 +1763,8 @@ const Game = {
                     name: "小屋",
                     count: 0,
                     cost: { catnip: 100, catnipWood: 20 },
-                    description: "增加人口上限",
-                    effect: { maxPopulation: 5 },
+                    description: "增加1名小猫咪工人",
+                    effect: { maxPopulation: 1 },
                     workers: 0,
                     maxWorkers: 0
                 },
@@ -1286,10 +1811,10 @@ const Game = {
                     name: "图书馆",
                     count: 0,
                     cost: { catnip: 600, catnipWood: 200, catCoin: 50 },
-                    description: "提高科技研究效率",
-                    effect: { techSpeed: 0.2 },
+                    description: "生产研究点数，需要科学家才能工作",
+                    production: { researchPoints: 1 },
                     workers: 0,
-                    maxWorkers: 1
+                    maxWorkers: 2
                 },
                 adventureCamp: {
                     name: "探险营",
@@ -1299,6 +1824,105 @@ const Game = {
                     effect: { exploration: 0.1 },
                     workers: 0,
                     maxWorkers: 3
+                },
+                lumberMill: {
+                    name: "伐木场",
+                    count: 0,
+                    cost: { catnip: 300 },
+                    description: "生产猫薄荷木，需要伐木工才能工作",
+                    production: { catnipWood: 1 },
+                    workers: 0,
+                    maxWorkers: 2
+                },
+                mine: {
+                    name: "矿场",
+                    count: 0,
+                    cost: { catnip: 500, catnipWood: 100 },
+                    description: "生产矿产资源，需要矿工才能工作",
+                    production: { mineral: 0.5 },
+                    input: { catnip: 2 }, // 持续消耗猫薄荷
+                    workers: 0,
+                    maxWorkers: 2
+                },
+                ironMine: {
+                    name: "铁矿",
+                    count: 0,
+                    cost: { catnip: 1000, catnipWood: 300, mineral: 100 },
+                    description: "生产铁矿石，需要矿工才能工作",
+                    production: { ironOre: 0.5 },
+                    input: { catnip: 3 }, // 持续消耗猫薄荷
+                    workers: 0,
+                    maxWorkers: 3
+                },
+                copperMine: {
+                    name: "铜矿",
+                    count: 0,
+                    cost: { catnip: 1500, catnipWood: 500, ironOre: 100 },
+                    description: "生产铜矿石，需要矿工才能工作",
+                    production: { copperOre: 0.5 },
+                    input: { catnip: 4 }, // 持续消耗猫薄荷
+                    workers: 0,
+                    maxWorkers: 3
+                },
+                goldMine: {
+                    name: "金矿",
+                    count: 0,
+                    cost: { catnip: 2500, catnipWood: 800, copperOre: 200 },
+                    description: "生产金矿石，需要矿工才能工作",
+                    production: { goldOre: 0.3 },
+                    input: { catnip: 5 }, // 持续消耗猫薄荷
+                    workers: 0,
+                    maxWorkers: 4
+                },
+                smelter: {
+                    name: "冶炼厂",
+                    count: 0,
+                    cost: { catnip: 800, catnipWood: 200, mineral: 150 },
+                    description: "将矿石冶炼成锭，需要工人才能工作",
+                    production: { ironIngot: 0.4, copperIngot: 0.4 },
+                    input: { ironOre: 2, copperOre: 2, catnip: 5 }, // 持续消耗资源
+                    workers: 0,
+                    maxWorkers: 3
+                },
+                oilWell: {
+                    name: "油井",
+                    count: 0,
+                    cost: { catnip: 3000, ironIngot: 300, copperIngot: 200 },
+                    description: "开采石油，需要工人才能工作",
+                    production: { oil: 0.3 },
+                    input: { catnip: 8, ironIngot: 0.1 }, // 持续消耗资源
+                    workers: 0,
+                    maxWorkers: 4
+                },
+                refinery: {
+                    name: "精炼厂",
+                    count: 0,
+                    cost: { catnip: 5000, ironIngot: 500, oil: 200 },
+                    description: "将石油精炼成塑料和其他产品，需要工人才能工作",
+                    production: { plastic: 0.4, electronicParts: 0.2 },
+                    input: { oil: 2, copperIngot: 1, catnip: 10 }, // 持续消耗资源
+                    workers: 0,
+                    maxWorkers: 5
+                },
+                advancedFactory: {
+                    name: "高级工厂",
+                    count: 0,
+                    cost: { catnip: 10000, ironIngot: 800, plastic: 500, electronicParts: 300 },
+                    description: "生产高级材料，需要工人才能工作",
+                    production: { advancedMaterial: 0.2 },
+                    input: { ironIngot: 2, copperIngot: 2, plastic: 3, electronicParts: 1, catnip: 15 }, // 持续消耗资源
+                    workers: 0,
+                    maxWorkers: 6
+                },
+                nuclearPlant: {
+                    name: "核电站",
+                    count: 0,
+                    cost: { catnip: 20000, advancedMaterial: 1000, electronicParts: 800 },
+                    description: "提供大量能源，需要工人才能工作",
+                    production: { catnip: 10 }, // 生产猫薄荷作为能源产物
+                    input: { advancedMaterial: 0.5, electronicParts: 0.3, catnip: 20 }, // 持续消耗大量资源
+                    workers: 0,
+                    maxWorkers: 8
                 }
             };
             
